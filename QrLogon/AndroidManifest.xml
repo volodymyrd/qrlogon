@@ -5,10 +5,11 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="15"
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,21 @@
             android:name="com.gmail.volodymyrdotsenko.qr.StartActivity"
             android:label="@string/title_activity_start" >
         </activity>
+        
+<activity android:name="com.google.zxing.client.android.CaptureActivity"
+   android:screenOrientation="landscape"
+   android:configChanges="orientation|keyboardHidden"
+   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+   android:windowSoftInputMode="stateAlwaysHidden">
+   <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.DEFAULT"/>
+   </intent-filter>
+   <intent-filter>
+      <action android:name="com.google.zxing.client.android.SCAN"/>
+      <category android:name="android.intent.category.DEFAULT"/>
+    </intent-filter>
+</activity>        
     </application>
 
 </manifest>
