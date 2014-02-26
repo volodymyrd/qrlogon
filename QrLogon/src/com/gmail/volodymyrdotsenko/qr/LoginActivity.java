@@ -1,20 +1,7 @@
 package com.gmail.volodymyrdotsenko.qr;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Collections;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
@@ -80,6 +67,8 @@ public class LoginActivity extends Activity {
 		destroyed = true;
 	}
 
+	private String userName;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,7 +78,13 @@ public class LoginActivity extends Activity {
 		final Button submitButton = (Button) findViewById(R.id.submit);
 		submitButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				EditText editText = (EditText) findViewById(R.id.username);
+				userName = editText.getText().toString();
+				
 				new FetchSecuredResourceTask().execute();
+//		    	Intent intent = new Intent(thisLoginActivity, StartActivity.class);
+//		    	intent.putExtra("userName", userName);
+//		    	startActivity(intent);
 			}
 		});
 	}
@@ -99,8 +94,6 @@ public class LoginActivity extends Activity {
 	// ***************************************
 	private class FetchSecuredResourceTask extends
 			AsyncTask<Void, Void, Message> {
-
-		private String username;
 
 		private String password;
 
@@ -113,11 +106,7 @@ public class LoginActivity extends Activity {
 		protected void onPreExecute() {
 			showLoadingProgressDialog();
 
-			// build the message object
-			EditText editText = (EditText) findViewById(R.id.username);
-			this.username = editText.getText().toString();
-
-			editText = (EditText) findViewById(R.id.password);
+			EditText editText = (EditText) findViewById(R.id.password);
 			this.password = editText.getText().toString();
 		}
 
@@ -126,40 +115,10 @@ public class LoginActivity extends Activity {
 
 			final String url = getString(R.string.base_uri) + "/getmessage";
 
-			// UsernamePasswordCredentials creds = new
-			// UsernamePasswordCredentials(
-			// username, password);
-			//
-			// HttpClient httpclient = new DefaultHttpClient();
-			// ((AbstractHttpClient)httpclient).getCredentialsProvider().setCredentials(AuthScope.ANY,
-			// creds);
-			// HttpResponse response;
-			// String responseString = null;
-			//
-			// try {
-			// response = httpclient.execute(new HttpGet(url));
-			// StatusLine statusLine = response.getStatusLine();
-			// if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-			// ByteArrayOutputStream out = new ByteArrayOutputStream();
-			// response.getEntity().writeTo(out);
-			// out.close();
-			// responseString = out.toString();
-			// } else {
-			// // Closes the connection.
-			// response.getEntity().getContent().close();
-			// throw new IOException(statusLine.getReasonPhrase());
-			// }
-			// } catch (ClientProtocolException e) {
-			// // TODO Handle problems..
-			// } catch (IOException e) {
-			// // TODO Handle problems..
-			// }
-			// return responseString;
-
 			// Populate the HTTP Basic Authentitcation header with the username
 			// and password
 			HttpAuthentication authHeader = new HttpBasicAuthentication(
-					username, password);
+					userName, password);
 			HttpHeaders requestHeaders = new HttpHeaders();
 			requestHeaders.setAuthorization(authHeader);
 			requestHeaders.setAccept(Collections
@@ -197,7 +156,7 @@ public class LoginActivity extends Activity {
 			
 			if(result.getId() == 100) {
 		    	Intent intent = new Intent(thisLoginActivity, StartActivity.class);
-		    	
+		    	intent.putExtra("userName", userName);
 		    	startActivity(intent);
 			}
 		}

@@ -249,6 +249,7 @@ public final class R {
         public static final int scan=0x7f0a0006;
         public static final int submit=0x7f0a0003;
         public static final int title_activity_start=0x7f0a0004;
+        public static final int token_uri=0x7f0a0080;
         public static final int username=0x7f0a0001;
         public static final int wifi_changing_network=0x7f0a007c;
         public static final int wifi_ssid_label=0x7f0a007d;
